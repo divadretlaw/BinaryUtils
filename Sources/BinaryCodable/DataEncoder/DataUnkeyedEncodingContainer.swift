@@ -35,14 +35,14 @@ final class DataUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     }
 
     func encodeNil() throws {
-
     }
 
     func encode(_ value: Bool) throws {
         try encoder.store(value)
     }
+
     func encode(_ value: String) throws {
-        try encoder.storeUnkeyed(value)
+        try encoder.store(value)
     }
 
     func encode(_ value: Double) throws {

@@ -3,19 +3,19 @@ import XCTest
 import Compression
 
 final class DataEncoderTests: XCTestCase {
-    func testStringSingleValue() throws {
+    func testString() throws {
         let encoder = BinaryEncoder()
         let data = try encoder.encode("@")
         XCTAssertEqual(data, Data([0x40]))
     }
 
-    func testUInt8SingleValue() throws {
+    func testUInt8() throws {
         let encoder = BinaryEncoder()
         let data = try encoder.encode(0x40 as UInt8)
         XCTAssertEqual(data, Data(0x40 as UInt8))
     }
 
-    func testUInt64SingleValue() throws {
+    func testUInt64() throws {
         let encoder = BinaryEncoder()
         let data = try encoder.encode(0x40 as UInt64)
         XCTAssertEqual(data, Data(0x40 as UInt64))

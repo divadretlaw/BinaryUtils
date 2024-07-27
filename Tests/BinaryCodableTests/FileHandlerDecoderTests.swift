@@ -3,21 +3,21 @@ import XCTest
 import Compression
 
 final class FileHandlerDecoderTests: XCTestCase {
-    func testStringSingleValue() throws {
+    func testString() throws {
         let resource = Resource(name: "String", withExtension: "bin")
         let decoder = BinaryDecoder()
         let string = try decoder.decode(String.self, from: resource.url)
         XCTAssertEqual(string, "Hello World")
     }
 
-    func testUInt8SingleValue() throws {
+    func testUInt8() throws {
         let resource = Resource(name: "UInt8", withExtension: "bin")
         let decoder = BinaryDecoder()
         let value = try decoder.decode(UInt8.self, from: resource.url)
         XCTAssertEqual(value, 42)
     }
 
-    func testUInt64SingleValue() throws {
+    func testUInt64() throws {
         let resource = Resource(name: "UInt64", withExtension: "bin")
         let decoder = BinaryDecoder()
         let value = try decoder.decode(UInt64.self, from: resource.url)

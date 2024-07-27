@@ -3,21 +3,21 @@ import XCTest
 import Compression
 
 final class DataDecoderTests: XCTestCase {
-    func testStringSingleValue() throws {
+    func testString() throws {
         let data = Data("Hello World".utf8)
         let decoder = BinaryDecoder()
         let string = try decoder.decode(String.self, from: data)
         XCTAssertEqual(string, "Hello World")
     }
 
-    func testUInt8SingleValue() throws {
+    func testUInt8() throws {
         let data = Data([42])
         let decoder = BinaryDecoder()
         let value = try decoder.decode(UInt8.self, from: data)
         XCTAssertEqual(value, 42)
     }
 
-    func testUInt64SingleValue() throws {
+    func testUInt64() throws {
         let data = Data(42 as UInt64)
         let decoder = BinaryDecoder()
         let value = try decoder.decode(UInt8.self, from: data)

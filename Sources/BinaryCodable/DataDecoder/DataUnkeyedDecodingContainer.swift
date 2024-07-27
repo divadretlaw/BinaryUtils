@@ -39,7 +39,7 @@ final class DataUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
 
     func superDecoder() throws -> any Decoder {
-        fatalError()
+        DataDecoder(referencing: decoder.storage, at: decoder.codingPath + [BinaryCodingKey.superKey], options: decoder.options)
     }
 
     func decodeNil() -> Bool {

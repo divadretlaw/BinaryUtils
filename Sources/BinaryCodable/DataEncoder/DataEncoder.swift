@@ -18,8 +18,9 @@ final class DataEncoder: Encoder {
         self.options = options
     }
 
-    func append(data: Data) {
-        self.data += data
+    func store(_ value: Bool) throws {
+        var copy = value
+        data += Data(bytes: &copy, count: MemoryLayout<Bool>.size)
     }
 
     func storeSingle(_ value: String) throws {
@@ -34,7 +35,7 @@ final class DataEncoder: Encoder {
         }
     }
 
-    func storeUnkeyed(_ value: String) throws {
+    func store(_ value: String) throws {
         guard let string = value.data(using: options.stringEncoding) else {
             throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath, debugDescription: "Unable to encode given String using '\(options.stringEncoding)'"))
         }
@@ -44,11 +45,6 @@ final class DataEncoder: Encoder {
         case .nullTerminated:
             data += string + Data.nullByte
         }
-    }
-
-    func store(_ value: Bool) throws {
-        var copy = value
-        data += Data(bytes: &copy, count: MemoryLayout<Bool>.size)
     }
 
     func store(_ value: Double) throws {

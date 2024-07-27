@@ -14,18 +14,6 @@ final class DataSingleValueDecodingContainer: SingleValueDecodingContainer {
         self.decoder = decoder
     }
 
-    // MARK: - Errors
-
-    private func typeMismatchError<T>(type: T) -> DecodingError {
-        DecodingError.typeMismatch(
-            T.self,
-            DecodingError.Context(
-                codingPath: self.decoder.codingPath,
-                debugDescription: "Type of value was not expected."
-            )
-        )
-    }
-
     // MARK: - SingleValueDecodingContainer
 
     var codingPath: [CodingKey] {

@@ -25,7 +25,6 @@ final class DataDecoder: Decoder {
     func load<T>(type: T.Type) throws -> T {
         let startIndex = offset
         let endIndex = offset.advanced(by: MemoryLayout<T>.size)
-
         defer {
             self.offset = endIndex
         }
@@ -81,5 +80,4 @@ final class DataDecoder: Decoder {
     func singleValueContainer() throws -> SingleValueDecodingContainer {
         DataSingleValueDecodingContainer(referencing: self)
     }
-
 }
