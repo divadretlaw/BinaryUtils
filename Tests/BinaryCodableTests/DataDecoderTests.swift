@@ -10,6 +10,22 @@ final class DataDecoderTests: XCTestCase {
         XCTAssertEqual(string, "Hello World")
     }
 
+    func testStringArrayNullTerminated() throws {
+        let data = Data("Hello".utf8) + Data.nullByte + Data("World".utf8)
+        let decoder = BinaryDecoder()
+        decoder.stringDecodingStrategy = .nullTerminated
+        let string = try decoder.decode([String].self, from: data)
+        XCTAssertEqual(string, ["Hello", "World"])
+    }
+
+    func testStringArrayFixedSize() throws {
+        let data = Data("Hello".utf8).fixedSize(16) + Data("World".utf8).fixedSize(16)
+        let decoder = BinaryDecoder()
+        decoder.stringDecodingStrategy = .fixedSize(16)
+        let string = try decoder.decode([String].self, from: data)
+        XCTAssertEqual(string, ["Hello", "World"])
+    }
+    
     func testUInt8() throws {
         let data = Data([42])
         let decoder = BinaryDecoder()
@@ -17,11 +33,26 @@ final class DataDecoderTests: XCTestCase {
         XCTAssertEqual(value, 42)
     }
 
+    func testUInt8Array() throws {
+        let bytes: [UInt8] = [42, 64]
+        let data = Data(bytes)
+        let decoder = BinaryDecoder()
+        let value = try decoder.decode([UInt8].self, from: data)
+        XCTAssertEqual(value, [42, 64])
+    }
+
     func testUInt64() throws {
         let data = Data(42 as UInt64)
         let decoder = BinaryDecoder()
         let value = try decoder.decode(UInt8.self, from: data)
         XCTAssertEqual(value, 42)
+    }
+
+    func testUInt64Array() throws {
+        let data = Data(42 as UInt64) + Data(64 as UInt64)
+        let decoder = BinaryDecoder()
+        let value = try decoder.decode([UInt64].self, from: data)
+        XCTAssertEqual(value, [42, 64])
     }
 
     func testUnkeyedContainerBasic() throws {

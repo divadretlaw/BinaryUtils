@@ -29,10 +29,7 @@ final class DataSingleValueDecodingContainer: SingleValueDecodingContainer {
     }
 
     func decode(_ type: String.Type) throws -> String {
-        guard let string = String(data: decoder.storage, encoding: decoder.options.stringEncoding) else {
-            throw BinaryDecoder.Error.dataCorrupted
-        }
-        return string
+        try decoder.loadString()
     }
 
     func decode(_ type: Double.Type) throws -> Double {
