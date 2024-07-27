@@ -50,7 +50,7 @@ final class FileHandleDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
-        throw BinaryDecoder.Error.unsupported("Keyed Containers are not supported.")
+        KeyedDecodingContainer(FileHandleKeyedDecodingContainer(referencing: self))
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {

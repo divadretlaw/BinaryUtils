@@ -114,7 +114,7 @@ final class DataEncoder: Encoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        fatalError("Keyed Containers are not supported.")
+        KeyedEncodingContainer(DataKeyedEncodingContainer(referencing: self))
     }
 
     func unkeyedContainer() -> any UnkeyedEncodingContainer {

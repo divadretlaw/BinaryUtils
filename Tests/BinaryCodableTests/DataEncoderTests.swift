@@ -24,12 +24,12 @@ final class DataEncoderTests: XCTestCase {
     func testUnkeyedContainerBasic() throws {
         let encoder = BinaryEncoder()
         encoder.stringEncodingStrategy = .nullTerminated
-        let value = Test(name: "Hello World", value: 42)
+        let value = TestUnkeyed(name: "Hello World", value: 42)
         let data = try encoder.encode(value)
         // Test with Decoder
         let decoder = BinaryDecoder()
         decoder.stringDecodingStrategy = .nullTerminated
-        XCTAssertEqual(value, try decoder.decode(Test.self, from: data))
+        XCTAssertEqual(value, try decoder.decode(TestUnkeyed.self, from: data))
     }
 
     func testUnkeyedContainerNilable() throws {
@@ -69,15 +69,43 @@ final class DataEncoderTests: XCTestCase {
         XCTAssertEqual(value, try decoder.decode(TestStrings.self, from: data))
     }
 
+    func testKeyedContainerBasic() throws {
+        let encoder = BinaryEncoder()
+        let value = TestKeyed(name: "Hello World", value: 42)
+        let data = try encoder.encode(value)
+        // Test with decoder
+        let decoder = BinaryDecoder()
+
+        let testKeyed = try decoder.decode(TestKeyed.self, from: data)
+        XCTAssertEqual(testKeyed.name, "Hello World")
+        XCTAssertEqual(testKeyed.value, 42)
+
+        let testUnkeyed = try decoder.decode(TestUnkeyed.self, from: data)
+        XCTAssertEqual(testUnkeyed.name, "Hello World")
+        XCTAssertEqual(testUnkeyed.value, 42)
+    }
+
     func testNested() throws {
         let encoder = BinaryEncoder()
         let value = TestNested(
-            meta: Test(name: "Key", value: 42),
+            meta: TestUnkeyed(name: "Key", value: 42),
             values: []
         )
         let data = try encoder.encode(value)
         // Test with Decoder
         let decoder = BinaryDecoder()
         XCTAssertEqual(value, try decoder.decode(TestNested.self, from: data))
+    }
+
+    func testMixed() throws {
+        let encoder = BinaryEncoder()
+        let value = TestMixed(
+            keyed: TestKeyed(name: "Key", value: 42),
+            unkeyed: TestUnkeyed(name: "Key", value: 42)
+        )
+        let data = try encoder.encode(value)
+        // Test with Decoder
+        let decoder = BinaryDecoder()
+        XCTAssertEqual(value, try decoder.decode(TestMixed.self, from: data))
     }
 }

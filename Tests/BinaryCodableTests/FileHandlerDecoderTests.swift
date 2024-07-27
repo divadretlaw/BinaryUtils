@@ -28,7 +28,7 @@ final class FileHandlerDecoderTests: XCTestCase {
         let resource = Resource(name: "Basic", withExtension: "bin")
         let decoder = BinaryDecoder()
         decoder.stringDecodingStrategy = .nullTerminated
-        let test = try decoder.decode(Test.self, from: resource.url)
+        let test = try decoder.decode(TestUnkeyed.self, from: resource.url)
         XCTAssertEqual(test.name, "Hello World")
         XCTAssertEqual(test.value, 42)
     }

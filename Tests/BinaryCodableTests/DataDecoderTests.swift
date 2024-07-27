@@ -25,7 +25,7 @@ final class DataDecoderTests: XCTestCase {
         let string = try decoder.decode([String].self, from: data)
         XCTAssertEqual(string, ["Hello", "World"])
     }
-    
+
     func testUInt8() throws {
         let data = Data([42])
         let decoder = BinaryDecoder()
@@ -59,7 +59,7 @@ final class DataDecoderTests: XCTestCase {
         let data = Data("Hello World".utf8) + Data.nullByte + Data(42 as UInt32)
         let decoder = BinaryDecoder()
         decoder.stringDecodingStrategy = .nullTerminated
-        let test = try decoder.decode(Test.self, from: data)
+        let test = try decoder.decode(TestUnkeyed.self, from: data)
         XCTAssertEqual(test.name, "Hello World")
         XCTAssertEqual(test.value, 42)
     }
@@ -94,5 +94,25 @@ final class DataDecoderTests: XCTestCase {
         let strings = try decoder.decode(TestStrings.self, from: data)
         XCTAssertEqual(strings.key, "Hello")
         XCTAssertEqual(strings.value, "World")
+    }
+
+    func testKeyedContainerBasic() throws {
+        let data = Data("Hello World".utf8) + Data.nullByte + Data(42 as UInt32)
+        let decoder = BinaryDecoder()
+        decoder.stringDecodingStrategy = .nullTerminated
+        let test = try decoder.decode(TestKeyed.self, from: data)
+        XCTAssertEqual(test.name, "Hello World")
+        XCTAssertEqual(test.value, 42)
+    }
+
+    func testMixed() throws {
+        let data = Data("Hello World".utf8) + Data.nullByte + Data(42 as UInt32) + Data("Hello World".utf8) + Data.nullByte + Data(42 as UInt32)
+        let decoder = BinaryDecoder()
+        decoder.stringDecodingStrategy = .nullTerminated
+        let test = try decoder.decode(TestMixed.self, from: data)
+        XCTAssertEqual(test.keyed.name, "Hello World")
+        XCTAssertEqual(test.keyed.value, 42)
+        XCTAssertEqual(test.unkeyed.name, "Hello World")
+        XCTAssertEqual(test.unkeyed.value, 42)
     }
 }

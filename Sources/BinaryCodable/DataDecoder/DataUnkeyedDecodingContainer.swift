@@ -31,7 +31,7 @@ final class DataUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
 
     func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey: CodingKey {
-        throw BinaryDecoder.Error.unsupported("Keyed Containers are not supported.")
+        KeyedDecodingContainer(DataKeyedDecodingContainer<NestedKey>(referencing: decoder))
     }
 
     func nestedUnkeyedContainer() throws -> any UnkeyedDecodingContainer {

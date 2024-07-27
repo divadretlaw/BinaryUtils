@@ -1,6 +1,6 @@
 import Foundation
 
-struct Test: Equatable, Codable {
+struct TestUnkeyed: Equatable, Codable {
     let name: String
     let value: UInt32
 
