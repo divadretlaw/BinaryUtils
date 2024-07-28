@@ -108,4 +108,11 @@ final class DataEncoderTests: XCTestCase {
         let decoder = BinaryDecoder()
         XCTAssertEqual(value, try decoder.decode(TestMixed.self, from: data))
     }
+    
+    func testMD5() throws {
+        let md5 = try XCTUnwrap(MD5(md5String: "09f7e02f1290be211da707a266f153b3"))
+        let encoder = BinaryEncoder()
+        let data = try encoder.encode(md5)
+        XCTAssertEqual(data, Data([0x09, 0xf7, 0xe0, 0x2f, 0x12, 0x90, 0xbe, 0x21, 0x1d, 0xa7, 0x07, 0xa2, 0x66, 0xf1, 0x53, 0xb3]))
+    }
 }

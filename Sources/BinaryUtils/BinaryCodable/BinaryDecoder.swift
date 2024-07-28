@@ -24,7 +24,7 @@ public final class BinaryDecoder {
     }
 
     public init() {
-        self.userInfo = [:]
+        self.userInfo = [MD5.format: MD5.Format.binary]
     }
 
     private var options: Options {

@@ -8,6 +8,13 @@
 import Foundation
 
 public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendable {
+    public static let format: CodingUserInfoKey = CodingUserInfoKey(rawValue: "BinaryUtils.MD5.Format")!
+    
+    public enum Format {
+        case binary
+        case string
+    }
+    
     // swiftlint:disable:next large_tuple
     public let md5: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8)
 
@@ -99,46 +106,65 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
     // MARK: - Codable
     
     public init(from decoder: any Decoder) throws {
-        var container = try decoder.unkeyedContainer()
+        let format = decoder.userInfo[MD5.format] as? Format ?? .string
+        let container = try decoder.singleValueContainer()
         
-        md5 = (
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self),
-            try container.decode(UInt8.self)
-        )
+        switch format {
+        case .binary:
+            md5 = (
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self),
+                try container.decode(UInt8.self)
+            )
+        case .string:
+            let md5String = try container.decode(String.self)
+            
+            guard let md5 = MD5(md5String: md5String) else {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath,
+                                                                        debugDescription: "Attempted to decode MD5 from invalid MD5 string."))
+            }
+            self = md5
+        }
     }
     
     public func encode(to encoder: any Encoder) throws {
-        var container = encoder.unkeyedContainer()
+        let format = encoder.userInfo[MD5.format] as? Format ?? .string
+        var container = encoder.singleValueContainer()
         
-        try container.encode(md5.0)
-        try container.encode(md5.1)
-        try container.encode(md5.2)
-        try container.encode(md5.3)
-        try container.encode(md5.4)
-        try container.encode(md5.5)
-        try container.encode(md5.6)
-        try container.encode(md5.7)
-        try container.encode(md5.8)
-        try container.encode(md5.9)
-        try container.encode(md5.10)
-        try container.encode(md5.11)
-        try container.encode(md5.12)
-        try container.encode(md5.13)
-        try container.encode(md5.14)
-        try container.encode(md5.15)
+        switch format {
+        case .binary:
+            try container.encode(md5.0)
+            try container.encode(md5.1)
+            try container.encode(md5.2)
+            try container.encode(md5.3)
+            try container.encode(md5.4)
+            try container.encode(md5.5)
+            try container.encode(md5.6)
+            try container.encode(md5.7)
+            try container.encode(md5.8)
+            try container.encode(md5.9)
+            try container.encode(md5.10)
+            try container.encode(md5.11)
+            try container.encode(md5.12)
+            try container.encode(md5.13)
+            try container.encode(md5.14)
+            try container.encode(md5.15)
+
+        case .string:
+            try container.encode(md5String)
+        }
     }
 }

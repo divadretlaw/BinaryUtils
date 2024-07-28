@@ -115,4 +115,11 @@ final class DataDecoderTests: XCTestCase {
         XCTAssertEqual(test.unkeyed.name, "Hello World")
         XCTAssertEqual(test.unkeyed.value, 42)
     }
+    
+    func testMD5() throws {
+        let data = Data([0x09, 0xf7, 0xe0, 0x2f, 0x12, 0x90, 0xbe, 0x21, 0x1d, 0xa7, 0x07, 0xa2, 0x66, 0xf1, 0x53, 0xb3])
+        let decoder = BinaryDecoder()
+        let md5 = try decoder.decode(MD5.self, from: data)
+        XCTAssertEqual(md5.md5String, "09f7e02f1290be211da707a266f153b3")
+    }
 }
