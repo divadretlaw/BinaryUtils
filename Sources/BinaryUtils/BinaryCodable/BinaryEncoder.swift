@@ -31,7 +31,7 @@ public final class BinaryEncoder {
         Options(stringEncoding: stringEncoding, stringEncodingStrategy: stringEncodingStrategy, userInfo: userInfo)
     }
 
-    func encode<T>(_ value: T) throws -> Data where T: Encodable {
+    public func encode<T>(_ value: T) throws -> Data where T: Encodable {
         let encoder = DataEncoder(at: [], options: options)
         try value.encode(to: encoder)
         return encoder.data
