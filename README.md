@@ -1,4 +1,4 @@
-# BinaryCodable
+# Binary Utils
 
 ## License
 

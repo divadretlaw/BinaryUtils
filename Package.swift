@@ -4,24 +4,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "BinaryCodable",
+    name: "BinaryUtils",
     platforms: [
         .iOS(.v13),
         .macOS(.v11)
     ],
     products: [
         .library(
-            name: "BinaryCodable",
-            targets: ["BinaryCodable"]
+            name: "BinaryUtils",
+            targets: ["BinaryUtils"]
         )
     ],
     targets: [
         .target(
-            name: "BinaryCodable"
+            name: "BinaryUtils"
         ),
         .testTarget(
-            name: "BinaryCodableTests",
-            dependencies: ["BinaryCodable"]
+            name: "BinaryUtilTests",
+            dependencies: ["BinaryUtils"],
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )
