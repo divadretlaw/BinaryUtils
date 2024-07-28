@@ -23,7 +23,7 @@ public extension Data {
             return self
         }
     }
-
+    
     static var nullByte: Data {
         Data([0x0])
     }
