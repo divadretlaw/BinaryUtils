@@ -19,7 +19,7 @@ final class FileHandleDecoder: Decoder {
     }
 
     func load<T>(type: T.Type) throws -> T {
-        guard let type = try storage.load(type: T.self) else {
+        guard let type = try storage.read(type: T.self) else {
             throw BinaryDecoder.Error.dataCorrupted
         }
         return type
@@ -36,7 +36,7 @@ final class FileHandleDecoder: Decoder {
             }
             return string.trimmingCharacters(in: .controlCharacters)
         case .nullTerminated:
-            guard let type = try storage.loadString(encoding: options.stringEncoding) else {
+            guard let type = try storage.readString(encoding: options.stringEncoding) else {
                 throw BinaryDecoder.Error.dataCorrupted
             }
             return type
