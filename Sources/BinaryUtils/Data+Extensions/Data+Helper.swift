@@ -44,4 +44,8 @@ public extension Data {
         }
         return chunks
     }
+    
+    var hexDescription: String {
+        map { String(format: "%02X", $0) }.joined()
+    }
 }

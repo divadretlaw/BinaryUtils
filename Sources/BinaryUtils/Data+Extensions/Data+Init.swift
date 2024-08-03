@@ -8,6 +8,22 @@
 import Foundation
 
 public extension Data {
+    // MARK: Hex String
+    
+    init?(hexString string: String) {
+        let chunks = string.chunked(into: 2)
+        let bytes = chunks.map { UInt8($0, radix: 16) }
+        self.init(bytes)
+    }
+    
+    // MARK: Bytes
+    
+    init?(_ bytes: [UInt8?]) {
+        let unwrapped = bytes.compactMap { $0 }
+        guard bytes.count == unwrapped.count else { return nil }
+        self.init(unwrapped)
+    }
+    
     // MARK: Unsigned Integer
     
     init(_ value: UInt) {
