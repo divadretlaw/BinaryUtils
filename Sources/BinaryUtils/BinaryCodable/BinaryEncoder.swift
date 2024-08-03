@@ -8,7 +8,7 @@
 import Foundation
 
 public final class BinaryEncoder {
-    private let userInfo: [CodingUserInfoKey: Any]
+    public var userInfo: [CodingUserInfoKey: Any]
     public var stringEncoding: String.Encoding = .utf8
     public var stringEncodingStrategy: StringEncodingStrategy = .nullTerminated
 
