@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendable {
     public static let format: CodingUserInfoKey = CodingUserInfoKey(rawValue: "BinaryUtils.MD5.Format")!
@@ -18,9 +19,89 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
     // swiftlint:disable:next large_tuple
     public let md5: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8)
 
+    // MARK: - Init
+    
     public init() {
         md5 = UUID().uuid
     }
+    
+    // MARK: String
+    
+    public init(string: String) {
+        self.init(data: Data(string.utf8))
+    }
+    
+    // MARK: Data
+    
+    public init(data: Data) {
+        self.init(data: [data])
+    }
+    
+    public init(data: [Data]) {
+        var digest = Insecure.MD5()
+        for data in data {
+            digest.update(data: data)
+        }
+        
+        let bytes = Data(digest.finalize())
+        md5 = (
+            bytes[0],
+            bytes[1],
+            bytes[2],
+            bytes[3],
+            bytes[4],
+            bytes[5],
+            bytes[6],
+            bytes[7],
+            bytes[8],
+            bytes[9],
+            bytes[10],
+            bytes[11],
+            bytes[12],
+            bytes[13],
+            bytes[14],
+            bytes[15]
+        )
+    }
+    
+    // MARK: URL
+    
+    public init(url: URL) throws {
+        try self.init(urls: [url])
+    }
+    
+    public init(urls: [URL]) throws {
+        var digest = Insecure.MD5()
+        for url in urls {
+            let fileHandle = try FileHandle(forReadingFrom: url)
+            if let data = try fileHandle.readToEnd() {
+                digest.update(data: data)
+            }
+            try fileHandle.close()
+        }
+        
+        let bytes = Data(digest.finalize())
+        md5 = (
+            bytes[0],
+            bytes[1],
+            bytes[2],
+            bytes[3],
+            bytes[4],
+            bytes[5],
+            bytes[6],
+            bytes[7],
+            bytes[8],
+            bytes[9],
+            bytes[10],
+            bytes[11],
+            bytes[12],
+            bytes[13],
+            bytes[14],
+            bytes[15]
+        )
+    }
+    
+    // MARK: MD5 Strings
 
     public init?(md5String string: String) {
         let chunks = string.chunked(into: 2)
@@ -47,29 +128,6 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
         )
     }
 
-    public var md5String: String {
-        [
-            md5.0,
-            md5.1,
-            md5.2,
-            md5.3,
-            md5.4,
-            md5.5,
-            md5.6,
-            md5.7,
-            md5.8,
-            md5.9,
-            md5.10,
-            md5.11,
-            md5.12,
-            md5.13,
-            md5.14,
-            md5.15
-        ]
-        .map { String(format: "%02x", $0) }
-        .joined()
-    }
-    
     // MARK: - Hashable
     
     public func hash(into hasher: inout Hasher) {
@@ -101,6 +159,29 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
     
     public var description: String {
         md5String
+    }
+    
+    public var md5String: String {
+        [
+            md5.0,
+            md5.1,
+            md5.2,
+            md5.3,
+            md5.4,
+            md5.5,
+            md5.6,
+            md5.7,
+            md5.8,
+            md5.9,
+            md5.10,
+            md5.11,
+            md5.12,
+            md5.13,
+            md5.14,
+            md5.15
+        ]
+        .map { String(format: "%02x", $0) }
+        .joined()
     }
     
     // MARK: - Codable
