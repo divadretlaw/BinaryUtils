@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import zlib
 
 public extension Data {
     /// Returns new data formed from the `Data` by either
@@ -47,5 +48,12 @@ public extension Data {
     
     var hexDescription: String {
         map { String(format: "%02X", $0) }.joined()
+    }
+    
+    func crc32() -> uLong {
+        withUnsafeBytes { ptr in
+            let typedPointer = ptr.bindMemory(to: Bytef.self)
+            return zlib.crc32(0, typedPointer.baseAddress, uInt(count))
+        }
     }
 }
