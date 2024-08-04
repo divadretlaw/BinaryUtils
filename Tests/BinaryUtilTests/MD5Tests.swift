@@ -9,7 +9,7 @@ final class MD5Tests: XCTestCase {
         XCTAssertNotNil(md5)
     }
     
-    func testEncode() throws {
+    func testJsonEncoder() throws {
         let md5 = MD5()
         let data = try JSONEncoder().encode(md5)
         if let string = String(data: data, encoding: .utf8) {
@@ -17,15 +17,54 @@ final class MD5Tests: XCTestCase {
         }
     }
     
-    func testDecoder() throws {
+    func testJsonDecoder() throws {
         let json = "[\"09f7e02f1290be211da707a266f153b3\"]"
         let data = Data(json.utf8)
         let md5 = try JSONDecoder().decode([MD5].self, from: data)
         print(md5)
     }
     
-    func testMD5() {
+    func testBinaryEncoder() throws {
+        let md5 = MD5()
+        let data = try BinaryEncoder().encode(md5)
+        print(data.hexDescription)
+    }
+    
+    func testBinaryDecoder() throws {
+        let data = try XCTUnwrap(Data(hexString: "4139124A22F247E494ACAA5800BEB1D8"))
+        let md5 = try BinaryDecoder().decode(MD5.self, from: data)
+        XCTAssertEqual(md5.md5String, "4139124a22f247e494acaa5800beb1d8")
+    }
+    
+    func testMD5Size() {
         XCTAssertEqual(MemoryLayout<MD5>.size, 16)
+    }
+    
+    func testMD5NotEqual() throws {
+        let lhs = MD5()
+        let rhs = MD5()
+        XCTAssertNotEqual(lhs, rhs)
+        XCTAssertNotEqual(lhs.md5String, rhs.md5String)
+        let jsonEncoder = JSONEncoder()
+        XCTAssertNotEqual(try jsonEncoder.encode(lhs), try jsonEncoder.encode(rhs))
+        let binaryEncoder = BinaryEncoder()
+        let lhsData = try binaryEncoder.encode(lhs)
+        let rhsData = try binaryEncoder.encode(rhs)
+        XCTAssertNotEqual(lhsData, rhsData)
+    }
+    
+    func testMD5Equal() throws {
+        let data = Data([0x42, 0x64])
+        let lhs = MD5(data: data)
+        let rhs = MD5(data: data)
+        XCTAssertEqual(lhs, rhs)
+        XCTAssertEqual(lhs.md5String, rhs.md5String)
+        let jsonEncoder = JSONEncoder()
+        XCTAssertEqual(try jsonEncoder.encode(lhs), try jsonEncoder.encode(rhs))
+        let binaryEncoder = BinaryEncoder()
+        let lhsData = try binaryEncoder.encode(lhs)
+        let rhsData = try binaryEncoder.encode(rhs)
+        XCTAssertEqual(lhsData, rhsData)
     }
     
     func testString() throws {

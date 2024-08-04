@@ -152,7 +152,22 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
     // MARK: - Equatable
     
     public static func == (lhs: MD5, rhs: MD5) -> Bool {
-        lhs.hashValue == rhs.hashValue
+        lhs.md5.0 == rhs.md5.0 &&
+        lhs.md5.1 == rhs.md5.1 &&
+        lhs.md5.2 == rhs.md5.2 &&
+        lhs.md5.3 == rhs.md5.3 &&
+        lhs.md5.4 == rhs.md5.4 &&
+        lhs.md5.5 == rhs.md5.5 &&
+        lhs.md5.6 == rhs.md5.6 &&
+        lhs.md5.7 == rhs.md5.7 &&
+        lhs.md5.8 == rhs.md5.8 &&
+        lhs.md5.9 == rhs.md5.9 &&
+        lhs.md5.10 == rhs.md5.10 &&
+        lhs.md5.11 == rhs.md5.11 &&
+        lhs.md5.12 == rhs.md5.12 &&
+        lhs.md5.13 == rhs.md5.13 &&
+        lhs.md5.14 == rhs.md5.14 &&
+        lhs.md5.15 == rhs.md5.15
     }
     
     // MARK: - CustomStringConvertible
