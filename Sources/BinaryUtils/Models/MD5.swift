@@ -22,7 +22,7 @@ public struct MD5: Hashable, Equatable, CustomStringConvertible, Codable, Sendab
     // MARK: - Init
     
     public init() {
-        md5 = UUID().uuid
+        md5 = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     }
     
     // MARK: String
